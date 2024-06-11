@@ -1,0 +1,23 @@
+{
+    "name": "elastic-sink",
+    "config": {
+      "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+      "tasks.max": "1",
+      "topics": "sk.SK_SURVEYER.dbo.test",
+      "connection.url": "http://elasticsearch:9200",
+      "value.converter.schema.registry.url": "http://schema-registry:8081",
+      "key.converter.schema.registry.url": "http://schema-registry:8081",
+      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+      "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
+      "transforms": "unwrap,key",
+      "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+      "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.drop.deletes": "false",
+        "transforms.unwrap.delete.handling.mode":"rewrite",
+        "transforms.unwrap.add.source.fields":"table,lsn",
+       "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+      "transforms.key.field": "id",
+      "key.ignore": "false",
+      "type.name": "test"
+    }
+  }

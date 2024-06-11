@@ -1,0 +1,36 @@
+---
+lowercaseOutputName: true
+rules:
+  # Kafka server metrics
+  - pattern : kafka.server<type=(.+), name=(.+), clientId=(.+), topic=(.+), partition=(.*)><>Value
+    name: kafka_server_$1_$2
+    labels:
+      clientId: "$3"
+      topic: "$4"
+      partition: "$5"
+    type: GAUGE
+    help: Kafka Server $1 $2 - clientId $3, topic $4, partition $5
+
+  - pattern : kafka.server<type=(.+), name=(.+), clientId=(.+), brokerHost=(.+), brokerPort=(.*)><>Value
+    name: kafka_server_$1_$2
+    labels:
+      clientId: "$3"
+      brokerHost: "$4"
+      brokerPort: "$5"
+    type: GAUGE
+    help: Kafka Server $1 $2 - clientId $3, brokerHost $4, brokerPort $5
+
+  # Add more rules here to collect other metrics
+
+  # JMX metrics for JVM monitoring
+  - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(.+):'
+    name: jvm_memory_heap_$1
+    type: GAUGE
+    help: JVM Heap Memory Usage
+
+  - pattern: 'java.lang<type=Memory><NonHeapMemoryUsage>(.+):'
+    name: jvm_memory_nonheap_$1
+    type: GAUGE
+    help: JVM Non-Heap Memory Usage
+
+  # Add more JVM related metrics rules

@@ -1,0 +1,29 @@
+{
+    "name": "sk-sink",
+    "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "tasks.max": "1",
+        "topics": "sk.SK_SURVEYER.dbo.test",
+        "connection.url": "jdbc:sqlserver://192.168.2.15:1433;databaseName=SK_SURVEYER",
+        "connection.user": "sa",
+        "connection.password": "Password1234!",
+        "auto.create": "true",
+        "insert.mode": "upsert",
+        "pk.fields": "id",
+        "pk.mode": "record_key",
+        "value.converter.schema.registry.url": "http://schema-registry:8081",
+        "key.converter.schema.registry.url": "http://schema-registry:8081",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
+        "transforms": "unwrap,RenameTopic,extractKey,extractId",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false",
+        "transforms.RenameTopic.type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.RenameTopic.regex": "sk.SK_SURVEYER.dbo.(.*)",
+        "transforms.RenameTopic.replacement": "$1",
+        "transforms.extractKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+        "transforms.extractKey.fields": "id",
+        "transforms.extractId.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "transforms.extractId.field": "id"
+    }
+}
